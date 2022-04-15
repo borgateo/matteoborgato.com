@@ -17,17 +17,83 @@
     <meta property="twitter:url" content="https://matteoborgato.com" />
     <meta property="og:site_name" content="Matteo Borgato - borgateo" />
     
-    <link rel="stylesheet" href="/css/styles.css" />
-    <link rel="stylesheet" href="https://use.typekit.net/gvf5gsl.css">
+    <style type="text/css">
+      /*
+        Remove all the styles of the "User-Agent-Stylesheet", except for the 'display' property
+        - The "symbol *" part is to solve Firefox SVG sprite bug
+      */
+      *:where(:not(iframe, canvas, img, svg, video):not(svg *, symbol *)) {
+        all: unset;
+        display: revert;
+      }
+
+      /* Preferred box-sizing value */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      /* Reapply the pointer cursor for anchor tags */
+      a, button {
+        cursor: revert;
+      }
+      /* ---- END of reset ---- */
+      html {
+        background-color: #282a36;
+        color: #f8f8f2;
+        font-family: freight-text-pro,"ui-serif",Georgia,serif;
+        font-size: 14px
+      }
+
+      h1 {
+        font-size: 7.594rem
+      }
+
+      h1,h2 {
+        font-weight: 700;
+        line-height: 7rem
+      }
+
+      h2 {
+        font-size: 2.25rem;
+        text-transform: uppercase
+      }
+
+      p {
+        font-size: 1.35rem
+      }
+
+      a {
+        text-decoration: underline
+      }
+
+      main {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        align-items: center;
+        display: grid;
+        height: 100vh;
+        text-align: center
+      }
+
+      .links {
+        padding: 5rem 5rem 0
+      }
+    </style>
     
-    <script src="/js/main.js"></script>
-    <!-- Cloudflare Web Analytics -->
-    <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "f111569eacea4617be920a3f9403c03b"}'></script>
-    <!-- End Cloudflare Web Analytics -->
+    <link rel="preload" href="/css/styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" rel="stylesheet" as="style" href="https://use.typekit.net/gvf5gsl.css">
+    <noscript><link rel="stylesheet" href="/css/styles.css"></noscript>
   </head>
   <body>
     <main>
       {{ content }}
     </main>
+
+    <script defer src="/js/main.js"></script>
+    <!-- Cloudflare Web Analytics -->
+    <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "f111569eacea4617be920a3f9403c03b"}'></script>
+    <!-- End Cloudflare Web Analytics -->
   </body>
 </html>
