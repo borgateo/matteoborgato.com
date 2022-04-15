@@ -3,7 +3,7 @@
 Changes to Eleventy content, Typescript/JavaScript, and CSS all trigger automatic updates in the browser.
 
 ```
-npm run dev
+yarn dev
 ```
 
 ### 5. Build for production
