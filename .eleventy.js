@@ -1,23 +1,74 @@
-const img = require("./shortcodes/img.js");
+const yaml = require("js-yaml");
+const { DateTime } = require("luxon");
+const syntaxHighlight = require("@11ty/eleventy-plugin-syntaxhighlight");
+const lazyImagesPlugin = require('eleventy-plugin-lazyimages');
+const htmlmin = require("html-minifier");
 
-module.exports = function (config) {
-    config.addShortcode("img", img);
+module.exports = function (eleventyConfig) {
+  // Disable automatic use of your .gitignore
+  eleventyConfig.setUseGitIgnore(false);
 
-    config.setUseGitIgnore(false);
+  // Merge data instead of overriding
+  eleventyConfig.setDataDeepMerge(true);
 
-    // config.addPassthroughCopy({ "source/images/*": "/images" });
+  // human readable date
+  eleventyConfig.addFilter("readableDate", (dateObj) => {
+    return DateTime.fromJSDate(dateObj, { zone: "utc" }).toFormat(
+      "MMMM dd, yyyy"
+    );
+  });
 
-    if (process.env.NODE_ENV === "dev") {
-        config.addPassthroughCopy({ "source/css": "/css" }); // uncompiled
-        config.addPassthroughCopy({ "build/images": "/images" });
-    } else {
-        // Compiled CSS is output directly to the build directory with PostCSS
+  // Syntax Highlighting for Code blocks
+  eleventyConfig.addPlugin(syntaxHighlight);
+
+  // LazyImages plugin
+  eleventyConfig.addPlugin(lazyImagesPlugin);
+
+  // To Support .yaml Extension in _data
+  // You may remove this if you can use JSON
+  eleventyConfig.addDataExtension("yaml", (contents) => yaml.load(contents));
+
+  // Copy Static Files to /_Site
+  eleventyConfig.addPassthroughCopy({
+    "./source/admin/config.yml": "./admin/config.yml",
+    "./node_modules/alpinejs/dist/cdn.min.js": "./static/js/alpine.js",
+    "./node_modules/prismjs/themes/prism-tomorrow.css":
+      "./static/css/prism-tomorrow.css",
+  });
+
+  // Copy Image Folder to /_site
+  eleventyConfig.addPassthroughCopy("./source/static/img");
+
+  // Copy Doc Folder to /_site
+  eleventyConfig.addPassthroughCopy("./source/static/doc");
+
+  // Copy favicon to route of /_site
+  eleventyConfig.addPassthroughCopy("./source/favicon.ico");
+
+  // Copy robots to route of /_site
+  eleventyConfig.addPassthroughCopy("./source/robots.txt");
+
+  // Minify HTML
+  eleventyConfig.addTransform("htmlmin", function (content, outputPath) {
+    // Eleventy 1.0+: use this.inputPath and this.outputPath instead
+    if (outputPath.endsWith(".html")) {
+      let minified = htmlmin.minify(content, {
+        useShortDoctype: true,
+        removeComments: true,
+        collapseWhitespace: true,
+      });
+      return minified;
     }
 
-    return {
-        templateFormats: ["md", "html", "js"],
-        dir: {
-            input: "source",
-        },
-    };
+    return content;
+  });
+
+  // Let Eleventy transform HTML files as nunjucks
+  // So that we can use .html instead of .njk
+  return {
+    dir: {
+      input: "source",
+    },
+    htmlTemplateEngine: "njk",
+  };
 };

@@ -1,45 +1,40 @@
 {
-    "name": "11ty-nostrils",
-    "version": "1.0.0",
-    "description": "A starter config for Eleventy with pipelines for Typescript and PostCSS",
-    "scripts": {
-        "dev": "NODE_ENV=dev npm-run-all -p watch:*",
-        "build": "npm-run-all clean-build build:ts build:11ty -p minify:* build:css",
-        "watch:ts": "spack && chokidar source/js/*.ts -c spack",
-        "watch:11ty": "eleventy --serve",
-        "clean-build": "rimraf build",
-        "build:ts": "spack",
-        "build:11ty": "eleventy --output=build",
-        "build:css": "postcss source/css/styles.css --no-map --dir build/css",
-        "minify:html": "html-minifier --input-dir build --output-dir build --file-ext html --remove-comments --collapse-whitespace",
-        "minify:js": "terser build/js/main.js -m --toplevel -o build/js/main.js",
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "author": "Cornelius Bergen, Matchbox Creative",
-    "license": "MIT",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/cbergen/11ty-nostrils"
-    },
-    "devDependencies": {
-        "@11ty/eleventy": "^1.0.0",
-        "@11ty/eleventy-img": "^1.1.0",
-        "@swc/cli": "^0.1.35",
-        "@swc/core": "^1.2.50",
-        "browserslist": "^4.16.3",
-        "chokidar-cli": "^3.0.0",
-        "cssnano": "^5",
-        "html-minifier": "^4.0.0",
-        "npm-run-all": "^4.1.5",
-        "postcss": "^8.2.7",
-        "postcss-cli": "^9.1.0",
-        "postcss-import": "^14.0.0",
-        "postcss-preset-env": "^7.4.2",
-        "rimraf": "^3.0.2",
-        "terser": "^5.6.0"
-    },
-    "browserslist": [
-        "defaults"
-    ],
-    "dependencies": {}
+  "name": "matteoborgato.com",
+  "version": "1.0.0",
+  "description": "Matteo Borgato personal website",
+  "engines": {
+    "node": ">=22.0.0 <23.0.0"
+  },
+  "scripts": {
+    "start": "npm-run-all --parallel css eleventy browsersync",
+    "eleventy": "eleventy --watch",
+    "debug": "set DEBUG=* & eleventy",
+    "css": "postcss source/static/css/tailwind.css --o _site/static/css/style.css --watch",
+    "build": "cross-env NODE_ENV=production eleventy && cross-env NODE_ENV=production tailwindcss -i source/static/css/tailwind.css -o _site/static/css/style.css",
+    "browsersync": "browser-sync start --server '_site' --files '_site' --port 8080 --no-notify --no-open"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^3.1.2",
+    "@11ty/eleventy-plugin-syntaxhighlight": "^5.0.0",
+    "@tailwindcss/typography": "^0.5.15",
+    "alpinejs": "^3.14.1",
+    "browser-sync": "^3.0.3",
+    "cross-env": "^7.0.3",
+    "cssnano": "^7.0.6",
+    "eleventy-plugin-lazyimages": "^2.1.2",
+    "html-minifier": "^4.0.0",
+    "js-yaml": "^4.1.0",
+    "luxon": "^3.5.0",
+    "npm-run-all": "^4.1.5",
+    "postcss-cli": "^11.0.0",
+    "prismjs": "^1.26.0",
+    "tailwindcss": "^3.4.13"
+  },
+  "dependencies": {
+    "@jlengstorf/get-share-image": "^1.0.2",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.47"
+  },
+  "author": "Matteo Borgato",
+  "license": "MIT"
 }
